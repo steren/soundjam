@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SoundJam</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@steren">
+  <meta name="twitter:title" content="SoundJam">
+  <meta name="twitter:image" content="https://soundjam.app/title.png">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="SoundJam">
+  <meta property="og:image" content="https://soundjam.app/title.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "author": "Steren Giannini",
+    "name": "SoundJam",
+    "image": "https://soundjam.app/title.png"
+  }
+  </script>
+
+  <style>
+    html {
+      max-width: 70ch;
+      padding: 3em 1em;
+      margin: auto;
+      line-height: 1.75;
+      font-size: 1.25em;
+      font-family: sans-serif;
+    }
+
+    h1,h2,h3,h4,h5,h6 {
+      margin: 3em 0 1em;
+    }
+
+    p,ul,ol {
+      margin-bottom: 2em;
+    }
+
+    .icon {
+      float: left;
+      margin-right: 1em;
+      width: 3em;
+      height: 3em;
+    }
+
+    select, label{
+      display:block;
+    }
+
+  </style>
+</head>
+
+<body id='dropbox'>
+
+  <header>
+    <img src="icon.svg" alt="icon" class="icon">
+    <h1>SoundJam</h1>
+    <p>
+      A tool to create sound board apps from a set of sounds.     
+    </p>
+  </header>
+
+  <main>
+
+    <form>
+
+      <label for="name">Name</label>
+      <input id="name">
+
+      <label for="short_name">Short name</label>
+      <input id="short_name">
+      
+      <label for="primary">Primary color</label>
+      <input type="color" id="primary" value="#e66465">
+      
+      <label for="icon-input">Icon</label>
+      <input type="file" id="icon-input" accept="image/*">
+
+      <label for="sounds-input">Add sounds (Or drag and drop them anywhere on this page)</label>
+      <input type="file" id="sounds-input" multiple accept="audio/*">
+    </form>
+
+    <h2>Sounds</h2>
+    <ol id="sounds">
+    </ol>
+
+    <iframe id="preview" src="preview.html" frameborder="0"></iframe>
+    
+  </main>
+
+  <script>
+    // Add selected files to dropdown
+    function handleFiles(files) {
+      for (let i = 0; i < files.length; i++) {
+        let file = files[i];
+        
+        if (!file.type.startsWith('audio/')){ continue }
+        
+        let reader = new FileReader();
+        reader.onload = e => { processFile(e.target.result, file.name); };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Add a URL to the dropdown
+    function processFile(url, name) {
+      const newOption = document.createElement("option");
+      newOption.value = JSON.stringify({ src: url });
+      newOption.text = name;
+      examples.appendChild(newOption);
+      examples.selectedIndex = examples.options.length - 1;
+      examples.dispatchEvent(new Event('change'));
+    }
+
+    document.getElementById("sounds-input").addEventListener("change", (e) => {
+      handleFiles(e.target.files);
+    }, false);
+
+    // Drag and drop
+    const dropzone = document.getElementById("dropbox");
+    dropzone.ondragover = dropzone.ondragenter = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    dropzone.ondrop = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      handleFiles(e.dataTransfer.files);
+    }
+  </script>
+
+</body>
+
+</html>

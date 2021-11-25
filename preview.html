@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <meta name="theme-color" content="#6200ee"/>
+    <title>Jojos soundboard</title>
+    <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
+
+    <!-- <link rel="manifest" href="manifest.json"> -->
+
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+
+        --primary: #6200ee;
+        background: white;
+      }
+      body {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      button {
+        width: calc(50% - 2 * 3vw);
+        margin-left: 3vw;
+        margin-right: 3vw;
+        margin-bottom: 3vh;
+        margin-top: 3vh;
+      }
+
+      button {
+        font-family: Roboto, sans-serif;
+        font-size: 0.9rem;
+        line-height: 2.25rem;
+        font-weight: 500;
+        letter-spacing: 0.09em;
+        text-decoration: none;
+        text-transform: uppercase;
+        will-change: transform, opacity;
+        padding: 0 8px 0 8px;
+        display: inline-flex;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        border: none;
+        outline: none;
+        line-height: inherit;
+        user-select: none;
+        overflow: hidden;
+        vertical-align: middle;
+        border-radius: 4px;
+      }
+      button::before,
+      button::after {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0;
+        pointer-events: none;
+        content: "";
+
+        top: calc(50% - 100%);
+        left: calc(50% - 100%);
+        width: 200%;
+        height: 200%;
+
+        background-color: var(--primary);
+      }
+      button::before {
+        transition: opacity 15ms linear, background-color 15ms linear;
+        z-index: 1;
+      }
+      button:active {
+        outline: none;
+      }
+      button:hover {
+        cursor: pointer;
+      }
+      button:disabled {
+        background-color: transparent;
+        color: rgba(0, 0, 0, 0.37);
+        cursor: default;
+        pointer-events: none;
+      }
+      button:not(:disabled) {
+        background-color: transparent;
+      }
+      button:not(:disabled) {
+        color: var(--primary);
+      }
+
+      button:hover::before {
+        opacity: 0.04;
+      }
+      button:focus::before {
+        transition-duration: 75ms;
+        opacity: 0.12;
+      }
+      button::after {
+        transition: opacity 150ms linear;
+      }
+      button:active::after {
+        transition-duration: 75ms;
+        opacity: 0.16;
+      }
+    </style>
+
+  </head>
+  <body>
+
+  </body>
+
+  <script>
+  for (let button of document.getElementsByTagName("button")) {
+    button.onclick = function() {
+      this.nextElementSibling.play();
+    };
+  }
+  </script>
+
+  <!-- <script>
+    navigator.serviceWorker.register('sw.js')
+  </script> -->
+</html>
