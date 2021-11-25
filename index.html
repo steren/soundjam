@@ -27,12 +27,15 @@
 
   <style>
     html {
-      max-width: 70ch;
-      padding: 3em 1em;
-      margin: auto;
       line-height: 1.75;
       font-size: 1.25em;
       font-family: sans-serif;
+    }
+
+    #page {
+      max-width: 70ch;
+      padding: 3em 1em;
+      margin: auto;
     }
 
     h1,h2,h3,h4,h5,h6 {
@@ -58,47 +61,50 @@
 </head>
 
 <body id='dropbox'>
+  <div id="page">
 
-  <header>
-    <img src="icon.svg" alt="icon" class="icon">
-    <h1>SoundJam</h1>
-    <p>
-      A tool to create sound board apps from a set of sounds.     
-    </p>
-  </header>
+    <header>
+      <img src="icon.svg" alt="icon" class="icon">
+      <h1>SoundJam</h1>
+      <p>
+        A tool to create sound board apps from a set of sounds.     
+      </p>
+    </header>
 
-  <main>
+    <main>
 
-    <form>
+      <form>
 
-      <label for="name">Name</label>
-      <input id="name">
+        <label for="name">Name</label>
+        <input id="name">
 
-      <label for="short_name">Short name</label>
-      <input id="short_name">
-      
-      <label for="primary">Primary color</label>
-      <input type="color" id="primary" value="#e66465">
-      
-      <label for="icon-input">Icon</label>
-      <input type="file" id="icon-input" accept="image/*">
+        <label for="short_name">Short name</label>
+        <input id="short_name">
+        
+        <label for="primary">Primary color</label>
+        <input type="color" id="primary" value="#e66465">
+        
+        <label for="icon-input">Icon</label>
+        <input type="file" id="icon-input" accept="image/*">
 
-      <label for="sounds-input">Add sounds (Or drag and drop them anywhere on this page)</label>
-      <input type="file" id="sounds-input" multiple accept="audio/*">
-    </form>
+        <label for="sounds-input">Add sounds (Or drag and drop them anywhere on this page)</label>
+        <input type="file" id="sounds-input" multiple accept="audio/*">
+      </form>
 
-    <button id="download">Download your app</button>
+      <button id="download">Download your app</button>
 
-    <h2>Sounds</h2>
-    <ol id="sounds">
-    </ol>
+      <h2>Sounds</h2>
+      <ol id="sounds">
+      </ol>
 
-    <iframe id="preview" src="preview.html" frameborder="0"></iframe>
-    
-  </main>
+      <iframe id="preview" src="preview.html" frameborder="0"></iframe>    
+    </main>
+  </div>
 
   <script>
     const preview = document.getElementById("preview");
+
+    const sounds = [];
 
     // Add selected files to dropdown
     function handleFiles(files) {
@@ -107,20 +113,19 @@
         
         if (!file.type.startsWith('audio/')){ continue }
         
-        let reader = new FileReader();
-        reader.onload = e => { processFile(e.target.result, file.name); };
-        reader.readAsDataURL(file);
+        addSoundFile(file.name);
+
+        // TODO: should we read and capture as data URL?
+        // let reader = new FileReader();
+        // reader.onload = e => { addSoundFile(e.target.result, file.name); };
+        // reader.readAsDataURL(file);
       }
     }
 
     // Add a URL to the dropdown
-    function processFile(url, name) {
-      const newOption = document.createElement("option");
-      newOption.value = JSON.stringify({ src: url });
-      newOption.text = name;
-      examples.appendChild(newOption);
-      examples.selectedIndex = examples.options.length - 1;
-      examples.dispatchEvent(new Event('change'));
+    function addSoundFile(name) {
+      sounds.push({name, url: 'audio/' + name});
+      console.log(sounds);
     }
 
     document.getElementById("sounds-input").addEventListener("change", (e) => {
