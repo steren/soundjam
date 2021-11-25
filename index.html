@@ -56,6 +56,11 @@
     select, label{
       display:block;
     }
+    iframe {
+      display: block;
+      width: 100%;
+      height: 600px;
+    }
 
   </style>
 </head>
@@ -67,11 +72,18 @@
       <img src="icon.svg" alt="icon" class="icon">
       <h1>SoundJam</h1>
       <p>
-        A tool to create sound board apps from a set of sounds.     
+        A tool to create sound board apps from a set of sounds.
       </p>
     </header>
 
     <main>
+
+      <p>
+        Use the form bellow to configure the app and select your sounds.
+        The order of the sounds will be the order of the button in the app.
+        The file names of the sounds will be used as the button label (feel free to use spaces!). 
+      </p>
+
 
       <form>
 
@@ -84,19 +96,16 @@
         <label for="primary">Primary color</label>
         <input type="color" id="primary" value="#e66465">
         
-        <label for="icon-input">Icon</label>
-        <input type="file" id="icon-input" accept="image/*">
+        <!-- <label for="icon-input">Icon</label>
+        <input type="file" id="icon-input" accept="image/*"> -->
 
         <label for="sounds-input">Add sounds (Or drag and drop them anywhere on this page)</label>
         <input type="file" id="sounds-input" multiple accept="audio/*">
       </form>
 
-      <button id="download">Download your app</button>
-
-      <h2>Sounds</h2>
-      <ol id="sounds">
-      </ol>
-
+      <h2>Your app</h2>
+      <button id="download">Download</button>
+      <label for="preview">Preview</label>
       <iframe id="preview" src="preview.html" frameborder="0"></iframe>    
     </main>
   </div>
@@ -124,8 +133,25 @@
 
     // Add a URL to the dropdown
     function addSoundFile(name) {
-      sounds.push({name, url: 'audio/' + name});
+      const nameWithoutExtension = name.substr(0, name.lastIndexOf('.')) || input;
+      const sound = {
+        name: nameWithoutExtension, 
+        url: 'audio/' + name,
+      };
+      sounds.push(sound);
+      injectSoundToIframe(sound);
       console.log(sounds);
+    }
+
+    function injectSoundToIframe(sound) {
+      const iframeDoc = preview.contentWindow.document;
+      const button = iframeDoc.createElement('button');
+      button.innerText = sound.name;
+      const audio = iframeDoc.createElement('audio');
+      audio.src = sound.url;
+
+      iframeDoc.body.appendChild(button);
+      iframeDoc.body.appendChild(audio);
     }
 
     document.getElementById("sounds-input").addEventListener("change", (e) => {
