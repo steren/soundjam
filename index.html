@@ -87,6 +87,8 @@
       <input type="file" id="sounds-input" multiple accept="audio/*">
     </form>
 
+    <button id="download">Download your app</button>
+
     <h2>Sounds</h2>
     <ol id="sounds">
     </ol>
@@ -96,6 +98,8 @@
   </main>
 
   <script>
+    const preview = document.getElementById("preview");
+
     // Add selected files to dropdown
     function handleFiles(files) {
       for (let i = 0; i < files.length; i++) {
@@ -134,6 +138,20 @@
       e.preventDefault();
       handleFiles(e.dataTransfer.files);
     }
+
+    const button = document.getElementById("download");
+    button.addEventListener('click', () => {
+
+      const htmlToDownload = preview.contentWindow.document.documentElement.outerHTML;
+      
+      // Trick to download a file
+      const a = window.document.createElement('a');
+      a.href = window.URL.createObjectURL(new Blob([htmlToDownload], {type: 'text/html'}));
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
   </script>
 
 </body>
