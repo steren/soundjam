@@ -38,7 +38,7 @@
       margin: auto;
     }
 
-    h1,h2,h3,h4,h5,h6 {
+    h1 {
       margin: 3em 0 1em;
     }
 
@@ -72,20 +72,16 @@
       <img src="icon.svg" alt="icon" class="icon">
       <h1>SoundJam</h1>
       <p>
-        A tool to create sound board apps from a set of sounds.
+        Create sound boards.
       </p>
     </header>
 
     <main>
+      <label for="sounds-input">Select, record or drag and drop your sounds</label>
+      <input type="file" id="sounds-input" multiple accept="audio/*">
 
-      <p>
-        Use the form bellow to configure the app and select your sounds.
-        The order of the sounds will be the order of the button in the app.
-        The file names of the sounds will be used as the button label (feel free to use spaces!). 
-      </p>
-
-
-      <form>
+      <details>
+        <summary>More options</summary>
 
         <label for="name">Name</label>
         <input id="name">
@@ -98,14 +94,9 @@
         
         <!-- <label for="icon-input">Icon</label>
         <input type="file" id="icon-input" accept="image/*"> -->
-
-        <label for="sounds-input">Add sounds (Or drag and drop them anywhere on this page)</label>
-        <input type="file" id="sounds-input" multiple accept="audio/*">
-      </form>
-
-      <h2>Your app</h2>
-      <button id="download">Download</button>
-      <label for="preview">Preview</label>
+      </details>
+    
+      <h3 for="preview">Preview or <button id="download">Download</button> </h3>
       <iframe id="preview" src="preview.html" frameborder="0"></iframe>    
     </main>
   </div>
