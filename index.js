@@ -1,4 +1,5 @@
 const sounds = [];
+let icon; 
 
 // Add selected files to dropdown
 function handleFiles(files) {
@@ -33,6 +34,28 @@ function addSoundFile(name, url) {
   sounds.push(sound);
   injectSoundToIframe(sound);
   console.log(sounds);
+}
+
+function onIconSelected(files) {
+  if (files.length > 0) {
+    const file = files[0];
+    const reader = new FileReader();
+    reader.onload = e => {
+      icon = {name: file.name, url: e.target.result};
+      updateIconPreview();
+      injectManifest();
+    }
+    reader.readAsDataURL(file);
+  }
+}
+
+document.getElementById("icon").addEventListener("change", (e) => {
+  onIconSelected(e.target.files);
+}, false);
+
+function updateIconPreview() {
+  const iconPreview = document.getElementById("icon-preview");
+  iconPreview.src = icon.url;
 }
 
 function generateManifest() {
