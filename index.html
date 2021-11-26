@@ -123,21 +123,28 @@
         
         if (!file.type.startsWith('audio/')){ continue }
         
-        addSoundFile(file.name);
-
-        // TODO: should we read and capture as data URL?
-        // let reader = new FileReader();
-        // reader.onload = e => { addSoundFile(e.target.result, file.name); };
-        // reader.readAsDataURL(file);
+        // if sounds should be inlined, parse the file as data URL
+        if (document.getElementById("inline").checked) {
+          let reader = new FileReader();
+          reader.onload = e => { addSoundFile(file.name, e.target.result); };
+          reader.readAsDataURL(file);
+        } else {
+          addSoundFile(file.name);
+        }
       }
     }
 
     // Add a URL to the dropdown
-    function addSoundFile(name) {
+    function addSoundFile(name, url) {
       const nameWithoutExtension = name.substr(0, name.lastIndexOf('.')) || input;
+
+      if(!url) {
+        url = `audio/${name}`;
+      }
+
       const sound = {
         name: nameWithoutExtension, 
-        url: 'audio/' + name,
+        url: url,
       };
       sounds.push(sound);
       injectSoundToIframe(sound);
