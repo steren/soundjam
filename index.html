@@ -53,9 +53,6 @@
       height: 3em;
     }
 
-    select, label{
-      display:block;
-    }
     iframe {
       display: block;
       width: 100%;
@@ -83,20 +80,33 @@
       <details>
         <summary>More options</summary>
 
-        <label for="name">Name</label>
-        <input id="name">
-
-        <label for="short_name">Short name</label>
-        <input id="short_name">
+        <div>
+          <label for="name">Name</label>
+          <input id="name">
+        </div>
         
-        <label for="primary">Primary color</label>
-        <input type="color" id="primary" value="#e66465">
+        <div>
+          <label for="primary">Primary color</label>
+          <input type="color" id="primary" value="#e66465">
+        </div>
+
+        <details>
+          <summary>Advanced options</summary>
+
+          <div>
+            <label for="short_name">Short name</label>
+            <input id="short_name">
+          </div>
+          <div>
+            <label for="inline"><input type="checkbox" id="inline" checked>Inline audio files</label>
+          </div>
+        </details>
         
         <!-- <label for="icon-input">Icon</label>
         <input type="file" id="icon-input" accept="image/*"> -->
       </details>
     
-      <h3 for="preview">Preview or <button id="download">Download</button> </h3>
+      <h3 for="preview">Preview, then <button id="download">Download</button> </h3>
       <iframe id="preview" src="preview.html" frameborder="0"></iframe>    
     </main>
   </div>
