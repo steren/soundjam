@@ -87,7 +87,7 @@
         
         <div>
           <label for="primary">Color</label>
-          <input type="color" id="primary" value="#e66465">
+          <input type="color" id="primary" value="#6200ee">
         </div>
 
         <details>
@@ -99,6 +99,7 @@
           </div>
           <div>
             <label for="inline"><input type="checkbox" id="inline" checked>Inline audio files</label>
+            <p>You will need to manually add audio files in a folder named <code>audio/</code></p>
           </div>
         </details>
         
@@ -112,8 +113,6 @@
   </div>
 
   <script>
-    const preview = document.getElementById("preview");
-
     const sounds = [];
 
     // Add selected files to dropdown
@@ -151,9 +150,58 @@
       console.log(sounds);
     }
 
+    function generateManifest() {
+      // base manifest (these do not change)
+      const manifestJson = {
+        "name": "SoundJam app",
+        "start_url": "/",
+        "background_color": "white",
+        "display": "standalone",
+        "scope": "/",
+      }
+
+      // inject app name
+      const name = document.getElementById("name").value;
+      if (name) {
+        manifestJson.name = name;
+      }
+
+      //inject app short name
+      const shortName = document.getElementById("short_name").value;
+      if (shortName) {
+        manifestJson.short_name = shortName;
+      }
+
+      // inject primary color
+      const primary = document.getElementById("primary").value;
+      if (primary) {
+        manifestJson.theme_color = primary;
+      }
+
+      return manifestJson;
+    }
+
+    function injectManifest() {
+      const iframeDoc = preview.contentWindow.document;
+      const manifestJson = generateManifest();
+      const manifest = JSON.stringify(manifestJson);
+
+      // inject manifest inline in iframe 
+      const manifestLink = iframeDoc.createElement('link');
+      manifestLink.setAttribute('rel', 'manifest');
+      manifestLink.setAttribute('href', `data:application/manifest+json;charset=utf-8,${encodeURIComponent(manifest)}`);
+      iframeDoc.head.appendChild(manifestLink);
+
+    }
+
+    document.getElementById("name").addEventListener("change", injectManifest);
+    document.getElementById("short_name").addEventListener("change", injectManifest);
+    document.getElementById("primary").addEventListener("change", injectManifest);
+
+
     function injectSoundToIframe(sound) {
       const iframeDoc = preview.contentWindow.document;
-      const button = iframeDoc.createElement('button');
+       const button = iframeDoc.createElement('button');
       button.innerText = sound.name;
       button.onclick = function() {
         this.nextElementSibling.play();
@@ -163,6 +211,9 @@
 
       iframeDoc.querySelector("main").appendChild(button);
       iframeDoc.querySelector("main").appendChild(audio);
+
+      // also inject manifest
+      injectManifest();
     }
 
     document.getElementById("sounds-input").addEventListener("change", (e) => {
@@ -183,8 +234,8 @@
 
     const button = document.getElementById("download");
     button.addEventListener('click', () => {
-
-      const htmlToDownload = preview.contentWindow.document.documentElement.outerHTML;
+      const iframeDoc = preview.contentWindow.document;
+      const htmlToDownload = iframeDoc.documentElement.outerHTML;
       
       // Trick to download a file
       const a = window.document.createElement('a');
