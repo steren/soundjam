@@ -18,7 +18,7 @@
         --primary: #6200ee;
         background: white;
       }
-      body {
+      main {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -111,18 +111,19 @@
 
   </head>
   <body>
+    <main></main>
+
+    <script>
+    for (let button of document.getElementsByTagName("button")) {
+      button.onclick = function() {
+        this.nextElementSibling.play();
+      };
+    }
+    </script>
+  
+    <!-- <script>
+      navigator.serviceWorker.register('sw.js')
+    </script> -->
 
   </body>
-
-  <script>
-  for (let button of document.getElementsByTagName("button")) {
-    button.onclick = function() {
-      this.nextElementSibling.play();
-    };
-  }
-  </script>
-
-  <!-- <script>
-    navigator.serviceWorker.register('sw.js')
-  </script> -->
 </html>

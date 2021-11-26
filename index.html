@@ -151,8 +151,8 @@
       const audio = iframeDoc.createElement('audio');
       audio.src = sound.url;
 
-      iframeDoc.body.appendChild(button);
-      iframeDoc.body.appendChild(audio);
+      iframeDoc.querySelector("main").appendChild(button);
+      iframeDoc.querySelector("main").appendChild(audio);
     }
 
     document.getElementById("sounds-input").addEventListener("change", (e) => {
