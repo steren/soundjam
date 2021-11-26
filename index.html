@@ -74,19 +74,19 @@
     </header>
 
     <main>
-      <label for="sounds-input">Select, record or drag and drop your sounds</label>
+      <label for="sounds-input">Select, record or drag and drop your sounds</label><br>
       <input type="file" id="sounds-input" multiple accept="audio/*">
 
       <details>
         <summary>More options</summary>
 
         <div>
-          <label for="name">Name</label>
+          <label for="name">App name</label>
           <input id="name">
         </div>
         
         <div>
-          <label for="primary">Primary color</label>
+          <label for="primary">Color</label>
           <input type="color" id="primary" value="#e66465">
         </div>
 
@@ -94,7 +94,7 @@
           <summary>Advanced options</summary>
 
           <div>
-            <label for="short_name">Short name</label>
+            <label for="short_name">App short name</label>
             <input id="short_name">
           </div>
           <div>
@@ -148,6 +148,9 @@
       const iframeDoc = preview.contentWindow.document;
       const button = iframeDoc.createElement('button');
       button.innerText = sound.name;
+      button.onclick = function() {
+        this.nextElementSibling.play();
+      };
       const audio = iframeDoc.createElement('audio');
       audio.src = sound.url;
 
