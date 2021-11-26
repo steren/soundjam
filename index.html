@@ -186,6 +186,8 @@
       const manifestJson = generateManifest();
       const manifest = JSON.stringify(manifestJson);
 
+      iframeDoc.head.querySelectorAll('link[rel="manifest"]').forEach(e => e.remove());
+
       // inject manifest inline in iframe 
       const manifestLink = iframeDoc.createElement('link');
       manifestLink.setAttribute('rel', 'manifest');
@@ -198,8 +200,39 @@
     document.getElementById("short_name").addEventListener("change", injectManifest);
     document.getElementById("primary").addEventListener("change", injectManifest);
 
+    function injectPrimaryColor() {
+      const primary = document.getElementById("primary").value;
+      
+      if (primary) {
+        const iframeDoc = preview.contentWindow.document;
+
+        // remove any previously set tags
+        iframeDoc.head.querySelectorAll('meta[name="theme-color"]').forEach(e => e.remove());
+        iframeDoc.head.querySelectorAll('style#primary').forEach(e => e.remove());
+
+        const meta = iframeDoc.createElement('meta');
+        meta.setAttribute('name', 'theme-color');
+        meta.setAttribute('content', primary);
+        iframeDoc.head.appendChild(meta);
+
+        const style = iframeDoc.createElement('style');
+        style.id = 'primary';
+        style.textContent = `
+          body {
+            --primary: ${primary};
+          }
+          `;
+        iframeDoc.head.appendChild(style);
+      }
+    }
+
+    document.getElementById("primary").addEventListener("change", injectPrimaryColor);
 
     function injectSoundToIframe(sound) {
+      // also inject manifest and primary color
+      injectPrimaryColor();
+      injectManifest();
+
       const iframeDoc = preview.contentWindow.document;
        const button = iframeDoc.createElement('button');
       button.innerText = sound.name;
@@ -211,9 +244,6 @@
 
       iframeDoc.querySelector("main").appendChild(button);
       iframeDoc.querySelector("main").appendChild(audio);
-
-      // also inject manifest
-      injectManifest();
     }
 
     document.getElementById("sounds-input").addEventListener("change", (e) => {
