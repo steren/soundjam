@@ -167,6 +167,7 @@ function injectSoundToIframe(sound) {
 
   iframeDoc.querySelector("main").appendChild(button);
   iframeDoc.querySelector("main").appendChild(audio);
+  iframeDoc.querySelector("main").appendChild(document.createTextNode("\n    "));
 }
 
 document.getElementById("sounds-input").addEventListener("change", (e) => {
