@@ -41,7 +41,11 @@ function onIconSelected(files) {
     const file = files[0];
     const reader = new FileReader();
     reader.onload = e => {
-      icon = {name: file.name, url: e.target.result};
+      icon = {
+        name: file.name,
+        type: file.type,
+        url: e.target.result,
+      };
       updateIconPreview();
       injectManifest();
     }
@@ -84,6 +88,17 @@ function generateManifest() {
   const primary = document.getElementById("primary").value;
   if (primary) {
     manifestJson.theme_color = primary;
+  }
+
+  // inject icon
+  if (icon) {
+    manifestJson.icons = [
+      {
+        src: icon.url,
+        type: icon.type,
+        size: "180x180",
+      }
+    ];
   }
 
   return manifestJson;
