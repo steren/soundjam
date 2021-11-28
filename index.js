@@ -115,6 +115,7 @@ function injectManifest() {
   const manifestLink = iframeDoc.createElement('link');
   manifestLink.setAttribute('rel', 'manifest');
   manifestLink.setAttribute('href', `data:application/manifest+json;charset=utf-8,${encodeURIComponent(manifest)}`);
+  iframeDoc.head.appendChild(document.createTextNode("\n    "));
   iframeDoc.head.appendChild(manifestLink);
 
 }
@@ -136,6 +137,7 @@ function injectPrimaryColor() {
     const meta = iframeDoc.createElement('meta');
     meta.setAttribute('name', 'theme-color');
     meta.setAttribute('content', primary);
+    iframeDoc.head.appendChild(document.createTextNode("\n    "));
     iframeDoc.head.appendChild(meta);
 
     const style = iframeDoc.createElement('style');
@@ -145,6 +147,7 @@ function injectPrimaryColor() {
         --primary: ${primary};
       }
       `;
+    iframeDoc.head.appendChild(document.createTextNode("\n    "));
     iframeDoc.head.appendChild(style);
   }
 }
