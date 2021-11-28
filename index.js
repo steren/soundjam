@@ -24,7 +24,7 @@ function addSoundFile(name, url) {
   const nameWithoutExtension = name.substr(0, name.lastIndexOf('.')) || input;
 
   if(!url) {
-    url = `audio/${name}`;
+    url = `sounds/${name}`;
   }
 
   const sound = {
